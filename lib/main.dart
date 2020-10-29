@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant/screens/theme_screen.dart';
-import './screens/filters_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import './providers/language_provider.dart';
+import './providers/meal_provider.dart';
+import './providers/theme_provider.dart';
+import './screens/themes_screen.dart';
 import './screens/tabs_screen.dart';
+import './screens/filters_screen.dart';
 import './screens/meal_detail_screen.dart';
 import './screens/category_meals_screen.dart';
-import 'package:provider/provider.dart';
-import 'providers/meal_provider.dart';
-import 'providers/theme_provider.dart';
+import './screens/on_boarding_screen.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  Widget homeScreen = (prefs.getBool('watched')?? false)? TabsScreen():OnBoardingScreen();
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -18,73 +28,97 @@ void main() {
         ChangeNotifierProvider<ThemeProvider>(
           create: (ctx) => ThemeProvider(),
         ),
+        ChangeNotifierProvider<LanguageProvider>(
+          create: (ctx) => LanguageProvider(),
+        ),
       ],
-      child: MyApp(),
+      child: MyApp(homeScreen),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  final Widget mainScreen;
+
+  MyApp(this.mainScreen);
+
   @override
   Widget build(BuildContext context) {
-    var currentColor = Provider.of<ThemeProvider>(context).currentColor;
-    var accentColor = Provider.of<ThemeProvider>(context).accentColor;
+    var primaryColor =
+        Provider.of<ThemeProvider>(context, listen: true).primaryColor;
+    var accentColor =
+        Provider.of<ThemeProvider>(context, listen: true).accentColor;
+    var tm = Provider.of<ThemeProvider>(context, listen: true).tm;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      themeMode: Provider.of<ThemeProvider>(context, listen: true).tm,
-      darkTheme: ThemeData(
-        primarySwatch: currentColor,
-        accentColor: accentColor,
-        canvasColor: Color.fromRGBO(14, 22, 33, 1),
-        cardColor: Color.fromRGBO(35, 34, 39, 1),
-        buttonColor: Colors.white,
-        shadowColor: Colors.white60,
-        textTheme: ThemeData.light().textTheme.copyWith(
-              bodyText1: TextStyle(
-                color: Color.fromRGBO(200, 230, 230, 1),
-              ),
-              headline5: TextStyle(
-                fontSize: 20,
-                color: Colors.white70,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
-              ),
-              headline6: TextStyle(
-                fontSize: 18,
-                color: Colors.white70,
-                fontFamily: 'RobotoCondensed',
-              ),
-            ),
-      ),
+      themeMode: tm,
       theme: ThemeData(
-        primarySwatch: currentColor,
+        primarySwatch: primaryColor,
         accentColor: accentColor,
         canvasColor: Color.fromRGBO(255, 254, 229, 1),
-        cardColor: Colors.white,
+        fontFamily: 'Raleway',
         buttonColor: Colors.black87,
-        shadowColor: Colors.black54,
+        cardColor: Colors.white,
+        shadowColor: Colors.white60,
         textTheme: ThemeData.light().textTheme.copyWith(
-              bodyText1: TextStyle(
-                color: Color.fromRGBO(20, 50, 50, 1),
-              ),
-              headline5: TextStyle(
-                fontSize: 20,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
-              ),
-              headline6: TextStyle(
-                fontSize: 18,
-                fontFamily: 'RobotoCondensed',
-              ),
+            bodyText1: TextStyle(
+              color: Color.fromRGBO(20, 50, 50, 1),
             ),
+            headline4: TextStyle(
+              color: Colors.black87,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            ),
+            headline5: TextStyle(
+              color: Colors.black87,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            ),
+            headline6: TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            )),
+      ),
+      darkTheme: ThemeData(
+        primarySwatch: primaryColor,
+        accentColor: accentColor,
+        canvasColor: Color.fromRGBO(14, 22, 33, 1),
+        fontFamily: 'Raleway',
+        buttonColor: Colors.white70,
+        cardColor: Color.fromRGBO(24, 37, 51, 1),
+        shadowColor: Colors.black54,
+        unselectedWidgetColor: Colors.white70,
+        textTheme: ThemeData.dark().textTheme.copyWith(
+            bodyText1: TextStyle(
+              color: Colors.white60,
+            ),
+            headline4: TextStyle(
+              color: Colors.white,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            ),
+            headline5: TextStyle(
+              color: Colors.white,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            ),
+            headline6: TextStyle(
+              color: Colors.white70,
+              fontSize: 20,
+              fontFamily: 'RobotoCondensed',
+              fontWeight: FontWeight.bold,
+            )),
       ),
       routes: {
-        '/': (ctx) => TabsScreen(),
+        '/': (ctx) => mainScreen,
+        TabsScreen.routeName: (ctx) => TabsScreen(),
         CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (context) => MealDetailScreen(),
         FiltersScreen.routeName: (context) => FiltersScreen(),
-        ThemeScreen.routeName: (context) => ThemeScreen(),
+        ThemesScreen.routeName: (context) => ThemesScreen(),
       },
     );
   }

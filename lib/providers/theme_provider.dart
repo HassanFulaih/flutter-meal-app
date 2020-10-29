@@ -2,89 +2,73 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider with ChangeNotifier {
-  Color currentColor = Colors.blueGrey;
-  Color accentColor = Colors.teal[100];
+  var primaryColor = Colors.pink;
+  var accentColor = Colors.amber;
 
-  ThemeMode tm = ThemeMode.system;
-  String themeText = "light";
+  var tm = ThemeMode.system;
+  String themeText = "s";
 
-  void onChanged(newColor) async {
-    currentColor = newColor;
-    _getAccentColor(Color(newColor.value));
+  onChanged(newColor, n) async {
+    n == 1
+        ? primaryColor = _toMaterialColor(newColor.hashCode)
+        : accentColor = _toMaterialColor(newColor.hashCode);
     notifyListeners();
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt("currentColor", currentColor.value);
+    prefs.setInt("primaryColor", primaryColor.value);
+    prefs.setInt("accentColor", accentColor.value);
   }
 
-  getColor() async {
+  getThemeColors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var c = prefs.getInt("currentColor") ?? 0xFF607D8B;
 
-    currentColor = MaterialColor(
-      c,
+    primaryColor = _toMaterialColor(prefs.getInt("primaryColor") ?? 0xFFE91E63);
+    accentColor = _toMaterialColor(prefs.getInt("accentColor") ?? 0xFFFFC107);
+    notifyListeners();
+  }
+
+  MaterialColor _toMaterialColor(colorVal) {
+    return MaterialColor(
+      colorVal,
       <int, Color>{
-        50: Color(c),
-        100: Color(c),
-        200: Color(c),
-        300: Color(c),
-        400: Color(c),
-        500: Color(c),
-        600: Color(c),
-        700: Color(c),
-        800: Color(c),
-        900: Color(c),
+        50: Color(0xFFFCE4EC),
+        100: Color(0xFFF8BBD0),
+        200: Color(0xFFF48FB1),
+        300: Color(0xFFF06292),
+        400: Color(0xFFEC407A),
+        500: Color(colorVal),
+        600: Color(0xFFD81B60),
+        700: Color(0xFFC2185B),
+        800: Color(0xFFAD1457),
+        900: Color(0xFF880E4F),
       },
     );
-
-    _getAccentColor(Color(c));
   }
 
-  _getAccentColor(Color pColor) {
-    if (pColor == Color(0xFF8BC34A) ||
-        pColor == Color(0xFFCDDC39) ||
-        pColor == Color(0xFFFFEB3B) ||
-        pColor == Color(0xFFFFC107) || pColor == Color(0xFFFF9800)) {
-      accentColor = Colors.purple;
-    } else if (pColor == Color(0xFF03A9F4) ||
-        pColor == Color(0xFF00BCD4) ||
-        pColor == Color(0xFF4CAF50)) {
-      accentColor = Colors.brown;
-    } else if (pColor == Color(0xFF9E9E9E)) {
-      accentColor = Colors.indigo[700];
-    } else if (pColor == Color(0xFF607D8B)) {
-      accentColor = Colors.teal[100];
-    } else {
-      accentColor = Colors.amber;
-    }
+  void themeModeChange(newThemeVal) async {
+    tm = newThemeVal;
+    _getThemeText(tm);
     notifyListeners();
-  }
 
-  void themeModeChange() async {
-    if (tm == ThemeMode.dark) {
-      tm = ThemeMode.light;
-      themeText = "light";
-    } else {
-      tm = ThemeMode.dark;
-      themeText = "dark";
-    }
-    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("themeText", themeText);
   }
 
-  getTheme() async {
+  _getThemeText(ThemeMode tm) {
+    if (tm == ThemeMode.dark)
+      themeText = "d";
+    else if (tm == ThemeMode.light)
+      themeText = "l";
+    else if (tm == ThemeMode.system) themeText = "s";
+  }
+
+  getThemeMode() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    themeText = prefs.getString("themeText");
-
-    if (themeText == null) {
-      tm = ThemeMode.system;
-      themeText = "system default";
-    } else {
-      tm = (themeText == "light") ? ThemeMode.light : ThemeMode.dark;
-    }
-
+    themeText = prefs.getString("themeText") ?? "s";
+    if (themeText == "d")
+      tm = ThemeMode.dark;
+    else if (themeText == "l")
+      tm = ThemeMode.light;
+    else if (themeText == "s") tm = ThemeMode.system;
     notifyListeners();
   }
 }
