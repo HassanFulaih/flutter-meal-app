@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant/screens/theme_screen.dart';
-import '../screens/filters_screen.dart';
+import 'package:provider/provider.dart';
 
-class MainDrawer extends StatelessWidget {
-  Widget buildListTile(String title, IconData icon, Function tapHandler, BuildContext ctx) {
+import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
+import '../screens/themes_screen.dart';
+import '../screens/filters_screen.dart';
+import '../screens/tabs_screen.dart';
+
+class MainDrawer extends StatefulWidget {
+  @override
+  _MainDrawerState createState() => _MainDrawerState();
+}
+
+class _MainDrawerState extends State<MainDrawer> {
+  Widget buildListTile(
+      String title, IconData icon, Function tapHandler, BuildContext ctx) {
     return ListTile(
       leading: Icon(icon, size: 26, color: Theme.of(ctx).buttonColor),
       title: Text(
         title,
         style: TextStyle(
+          color: Theme.of(ctx).textTheme.bodyText1.color,
           fontSize: 24,
           fontFamily: 'RobotoCondensed',
           fontWeight: FontWeight.bold,
@@ -20,35 +32,81 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        children: [
-          Container(
-            height: 120,
-            width: double.infinity,
-            padding: EdgeInsets.all(20),
-            alignment: Alignment.centerLeft,
-            color: Theme.of(context).accentColor,
-            child: Text(
-              'Cooking Up!',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).primaryColor,
+    var lan = Provider.of<LanguageProvider>(context, listen: true);
+    return Directionality(
+      textDirection: lan.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Drawer(
+        elevation: 0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 120,
+                width: double.infinity,
+                padding: EdgeInsets.all(20),
+                alignment:
+                    lan.isEn ? Alignment.centerLeft : Alignment.centerRight,
+                color: Theme.of(context).accentColor,
+                child: Text(
+                  lan.getTexts('drawer_name'),
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 20),
+              buildListTile(lan.getTexts('drawer_item1'), Icons.restaurant, () {
+                Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+              }, context),
+              buildListTile(lan.getTexts('drawer_item2'), Icons.settings, () {
+                Navigator.of(context)
+                    .pushReplacementNamed(FiltersScreen.routeName);
+              }, context),
+              buildListTile(lan.getTexts('drawer_item3'), Icons.color_lens, () {
+                Navigator.of(context)
+                    .pushReplacementNamed(ThemesScreen.routeName);
+              }, context),
+              Divider(
+                height: 10,
+                color: Colors.black54,
+              ),
+              SizedBox(height: 10),
+              Text(
+                lan.getTexts('drawer_switch_title'),
+                style: Theme.of(context).textTheme.headline6,
+                textAlign: TextAlign.center,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(lan.getTexts('drawer_switch_item2'),
+                        style: Theme.of(context).textTheme.headline6),
+                    Switch(
+                      value: lan.isEn,
+                      onChanged: (newValue) {
+                        lan.changeLan(newValue);
+                        Navigator.of(context).pop();
+                      },
+                      inactiveTrackColor:
+                          Provider.of<ThemeProvider>(context, listen: true).tm ==
+                                  ThemeMode.light
+                              ? null
+                              : Colors.black,
+                    ),
+                    Text(lan.getTexts('drawer_switch_item1'),
+                        style: Theme.of(context).textTheme.headline6),
+                  ],
+                ),
+              SizedBox(height: 10),
+              Divider(
+                height: 10,
+                color: Colors.black54,
+              ),
+            ],
           ),
-          SizedBox(height: 20),
-          buildListTile("Meal", Icons.restaurant, () {
-            Navigator.of(context).pushReplacementNamed('/');
-          }, context),
-          buildListTile("Filters", Icons.settings, () {
-            Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
-          }, context),
-          buildListTile("Themes", Icons.color_lens, () {
-            Navigator.of(context).pushReplacementNamed(ThemeScreen.routeName);
-          }, context),
-        ],
+        ),
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant/providers/language_provider.dart';
+import 'package:provider/provider.dart';
+
 import '../models/meal.dart';
 import '../widgets/meal_item.dart';
-import 'package:provider/provider.dart';
-import 'package:restaurant/providers/meal_provider.dart';
+import '../providers/meal_provider.dart';
 
 class CategoryMealsScreen extends StatefulWidget {
   static const routeName = 'category_meals';
@@ -12,15 +14,16 @@ class CategoryMealsScreen extends StatefulWidget {
 }
 
 class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
-  String categoryTitle;
+  String categoryId;
   List<Meal> displayedMeals;
 
   @override
   void didChangeDependencies() {
-    final List<Meal> availableMeals = Provider.of<MealProvider>(context, listen: true).availableMeals;
-    final routeArg = ModalRoute.of(context).settings.arguments as Map<String, String>;
-    final categoryId = routeArg['id'];
-    categoryTitle = routeArg['title'];
+    final List<Meal> availableMeals =
+        Provider.of<MealProvider>(context, listen: true).availableMeals;
+    final routeArg =
+        ModalRoute.of(context).settings.arguments as Map<String, String>;
+    categoryId = routeArg['id'];
     displayedMeals = availableMeals.where((meal) {
       return meal.categories.contains(categoryId);
     }).toList();
@@ -29,21 +32,32 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(title: Text(categoryTitle)),
-      body: ListView.builder(
-        itemBuilder: (ctx, index) {
-          return MealItem(
-            id: displayedMeals[index].id,
-            imageUrl: displayedMeals[index].imageUrl,
-            title: displayedMeals[index].title,
-            duration: displayedMeals[index].duration,
-            complexity: displayedMeals[index].complexity,
-            affordability: displayedMeals[index].affordability,
-          );
-        },
-        itemCount: displayedMeals.length,
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    var dw = MediaQuery.of(context).size.width;
+    var lan = Provider.of<LanguageProvider>(context, listen: true);
+    return Directionality(
+      textDirection: lan.isEn ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(title: Text(lan.getTexts('cat-$categoryId'))),
+        body: GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: dw <= 400 ? 400 : 500,
+            childAspectRatio: isLandscape ? dw / (dw * 0.8) : dw / (dw * 0.75),
+            crossAxisSpacing: 0,
+            mainAxisSpacing: 0,
+          ),
+          itemBuilder: (ctx, index) {
+            return MealItem(
+              id: displayedMeals[index].id,
+              imageUrl: displayedMeals[index].imageUrl,
+              duration: displayedMeals[index].duration,
+              complexity: displayedMeals[index].complexity,
+              affordability: displayedMeals[index].affordability,
+            );
+          },
+          itemCount: displayedMeals.length,
+        ),
       ),
     );
   }

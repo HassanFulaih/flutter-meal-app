@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant/models/meal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/category.dart';
+import '../models/meal.dart';
 import '../dummy_data.dart';
 
-class MealProvider with ChangeNotifier{
+class MealProvider with ChangeNotifier {
   Map<String, bool> filters = {
     'gluten': false,
     'lactose': false,
@@ -17,9 +18,10 @@ class MealProvider with ChangeNotifier{
 
   List<String> prefsMealId = [];
 
-  void setFilters() async{
+  List<Category> availableCategory = [];
 
-    availableMeals = DUMMY_MEALS.where((meal){
+  void setFilters() async {
+    availableMeals = DUMMY_MEALS.where((meal) {
       if (filters['gluten'] && !meal.isGlutenFree) {
         return false;
       }
@@ -35,37 +37,56 @@ class MealProvider with ChangeNotifier{
       return true;
     }).toList();
 
-    notifyListeners();
+    List<Category> ac = [];
+    availableMeals.forEach((meal) {
+      meal.categories.forEach((catId) {
+        DUMMY_CATEGORIES.forEach((cat) {
+          if (cat.id == catId) {
+            if (!ac.any((cat) => cat.id == catId)) ac.add(cat);
+          }
+        });
+      });
+    });
+    availableCategory = ac;
 
+    notifyListeners();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("gluten", filters['gluten']);
     prefs.setBool("lactose", filters['lactose']);
     prefs.setBool("vegan", filters['vegan']);
     prefs.setBool("vegetarian", filters['vegetarian']);
-
   }
 
-  void getData() async{
+  void getData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    filters['gluten'] = prefs.getBool("gluten")?? false;
-    filters['lactose'] = prefs.getBool("lactose")?? false;
-    filters['vegan'] = prefs.getBool("vegan")?? false;
-    filters['vegetarian'] = prefs.getBool("vegetarian")?? false;
+    filters['gluten'] = prefs.getBool("gluten") ?? false;
+    filters['lactose'] = prefs.getBool("lactose") ?? false;
+    filters['vegan'] = prefs.getBool("vegan") ?? false;
+    filters['vegetarian'] = prefs.getBool("vegetarian") ?? false;
     setFilters();
 
-    prefsMealId = prefs.getStringList("prefsMealId")?? [];
-    for(var mealId in prefsMealId){
-      final existingIndex = favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    prefsMealId = prefs.getStringList("prefsMealId") ?? [];
+    for (var mealId in prefsMealId) {
+      final existingIndex =
+          favoriteMeals.indexWhere((meal) => meal.id == mealId);
       if (existingIndex < 0) {
         favoriteMeals.add(DUMMY_MEALS.firstWhere((meal) => meal.id == mealId));
       }
     }
+
+    List<Meal> fm = [];
+    favoriteMeals.forEach((favMeals) {
+      availableMeals.forEach((avMeals) {
+        if(favMeals.id == avMeals.id) fm.add(favMeals);
+      });
+    });
+    favoriteMeals = fm;
+
     notifyListeners();
   }
 
-
-  void toggleFavorite(String mealId) async{
+  void toggleFavorite(String mealId) async {
     final existingIndex = favoriteMeals.indexWhere((meal) => meal.id == mealId);
     if (existingIndex >= 0) {
       favoriteMeals.removeAt(existingIndex);
@@ -81,8 +102,7 @@ class MealProvider with ChangeNotifier{
     prefs.setStringList("prefsMealId", prefsMealId);
   }
 
-  bool isFavorite(String mealId){
+  bool isFavorite(String mealId) {
     return favoriteMeals.any((meal) => meal.id == mealId);
   }
-
 }
