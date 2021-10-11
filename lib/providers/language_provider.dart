@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LanguageProvider with ChangeNotifier {
   bool isEn = true;
 
-
   Map<String, Object> textsAr = {
     "start": "أبدأ الان",
     "drawer_name": "عالم الطبخ",
@@ -491,21 +490,21 @@ class LanguageProvider with ChangeNotifier {
     ],
   };
 
-  changeLan(bool lan) async{
+  changeLan(bool lan) async {
     isEn = lan;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("isEn", isEn);
   }
 
-  getLan() async{
+  getLan() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    isEn = prefs.getBool("isEn")?? true;
+    isEn = prefs.getBool("isEn") ?? true;
     notifyListeners();
   }
 
   Object getTexts(String txt) {
-    if (isEn == true) return textsEn[txt];
-    return textsAr[txt];
+    if (isEn == true) return textsEn[txt]!;
+    return textsAr[txt]!;
   }
 }

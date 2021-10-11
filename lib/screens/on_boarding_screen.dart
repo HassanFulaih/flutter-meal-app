@@ -42,7 +42,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       padding:
                           EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                       child: Text(
-                        lan.getTexts("drawer_name"),
+                        lan.getTexts("drawer_name").toString(),
                         style: Theme.of(context).textTheme.headline4,
                         softWrap: true,
                         overflow: TextOverflow.fade,
@@ -57,14 +57,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       child: Column(
                         children: [
                           Text(
-                            lan.getTexts('drawer_switch_title'),
+                            lan.getTexts('drawer_switch_title').toString(),
                             style: Theme.of(context).textTheme.headline5,
                             textAlign: TextAlign.center,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(lan.getTexts('drawer_switch_item2'),
+                              Text(
+                                  lan
+                                      .getTexts('drawer_switch_item2')
+                                      .toString(),
                                   style: Theme.of(context).textTheme.headline6),
                               Switch(
                                 value: lan.isEn,
@@ -74,7 +77,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                       .changeLan(newValue);
                                 },
                               ),
-                              Text(lan.getTexts('drawer_switch_item1'),
+                              Text(
+                                  lan
+                                      .getTexts('drawer_switch_item1')
+                                      .toString(),
                                   style: Theme.of(context).textTheme.headline6),
                             ],
                           ),
@@ -100,10 +106,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Container(
                 width: double.infinity,
                 margin: EdgeInsets.symmetric(horizontal: 10),
-                child: RaisedButton(
-                  padding: lan.isEn ? EdgeInsets.all(7) : EdgeInsets.all(0),
-                  color: primaryColor,
-                  child: Text(lan.getTexts('start'),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all(
+                        lan.isEn ? EdgeInsets.all(7) : EdgeInsets.all(0)),
+                    backgroundColor: MaterialStateProperty.all(primaryColor),
+                  ),
+                  child: Text(lan.getTexts('start').toString(),
                       style: TextStyle(
                           color: useWhiteForeground(primaryColor)
                               ? Colors.white
@@ -113,7 +122,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     Navigator.of(ctx)
                         .pushReplacementNamed(TabsScreen.routeName);
 
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     prefs.setBool('watched', true);
                   },
                 ),
@@ -154,7 +164,7 @@ class Indicator extends StatelessWidget {
             height: 15,
             width: 15,
             decoration: BoxDecoration(
-              color: Theme.of(ctx).accentColor,
+              color: Theme.of(ctx).colorScheme.secondary,
               shape: BoxShape.circle,
             ),
           );

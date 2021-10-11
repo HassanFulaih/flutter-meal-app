@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant/providers/language_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../models/meal.dart';
-import '../widgets/meal_item.dart';
 import '../providers/meal_provider.dart';
+import '../widgets/meal_item.dart';
+import '/providers/language_provider.dart';
 
 class CategoryMealsScreen extends StatefulWidget {
   static const routeName = 'category_meals';
@@ -14,16 +14,16 @@ class CategoryMealsScreen extends StatefulWidget {
 }
 
 class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
-  String categoryId;
-  List<Meal> displayedMeals;
+  String categoryId = '';
+  List<Meal> displayedMeals = <Meal>[];
 
   @override
   void didChangeDependencies() {
     final List<Meal> availableMeals =
         Provider.of<MealProvider>(context, listen: true).availableMeals;
     final routeArg =
-        ModalRoute.of(context).settings.arguments as Map<String, String>;
-    categoryId = routeArg['id'];
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    categoryId = routeArg['id']!;
     displayedMeals = availableMeals.where((meal) {
       return meal.categories.contains(categoryId);
     }).toList();
@@ -39,7 +39,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
     return Directionality(
       textDirection: lan.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(title: Text(lan.getTexts('cat-$categoryId'))),
+        appBar: AppBar(title: Text(lan.getTexts('cat-$categoryId').toString())),
         body: GridView.builder(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: dw <= 400 ? 400 : 500,

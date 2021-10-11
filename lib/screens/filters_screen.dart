@@ -14,7 +14,7 @@ class FiltersScreen extends StatelessWidget {
   FiltersScreen({this.fromOnBoarding = false});
 
   Widget buildSwitchListTile(String title, String description,
-      bool currentValue, Function updateValue, BuildContext ctx) {
+      bool currentValue, Function(bool) updateValue, BuildContext ctx) {
     return SwitchListTile(
       title: Text(title),
       value: currentValue,
@@ -38,21 +38,21 @@ class FiltersScreen extends StatelessWidget {
         appBar: fromOnBoarding
             ? AppBar(
                 backgroundColor: Theme.of(context).canvasColor, elevation: 0)
-            : AppBar(title: Text(lan.getTexts('filters_appBar_title'))),
+            : AppBar(title: Text(lan.getTexts('filters_appBar_title').toString())),
         body: Column(
           children: [
             Container(
               padding: EdgeInsets.all(20),
-              child: Text(lan.getTexts('filters_screen_title'),
+              child: Text(lan.getTexts('filters_screen_title').toString(),
                   style: Theme.of(context).textTheme.headline6),
             ),
             Expanded(
               child: ListView(
                 children: [
                   buildSwitchListTile(
-                    lan.getTexts('Gluten-free'),
-                    lan.getTexts('Gluten-free-sub'),
-                    currentFilters['gluten'],
+                    lan.getTexts('Gluten-free').toString(),
+                    lan.getTexts('Gluten-free-sub').toString(),
+                    currentFilters['gluten']!,
                     (newValue) {
                       currentFilters['gluten'] = newValue;
                       Provider.of<MealProvider>(context, listen: false)
@@ -61,9 +61,9 @@ class FiltersScreen extends StatelessWidget {
                     context,
                   ),
                   buildSwitchListTile(
-                    lan.getTexts('Lactose-free'),
-                    lan.getTexts('Lactose-free_sub'),
-                    currentFilters['lactose'],
+                    lan.getTexts('Lactose-free').toString(),
+                    lan.getTexts('Lactose-free_sub').toString(),
+                    currentFilters['lactose']!,
                     (newValue) {
                       currentFilters['lactose'] = newValue;
 
@@ -73,9 +73,9 @@ class FiltersScreen extends StatelessWidget {
                     context,
                   ),
                   buildSwitchListTile(
-                    lan.getTexts('Vegetarian'),
-                    lan.getTexts('Vegetarian-sub'),
-                    currentFilters['vegetarian'],
+                    lan.getTexts('Vegetarian').toString(),
+                    lan.getTexts('Vegetarian-sub').toString(),
+                    currentFilters['vegetarian']!,
                     (newValue) {
                       currentFilters['vegetarian'] = newValue;
                       Provider.of<MealProvider>(context, listen: false)
@@ -84,9 +84,9 @@ class FiltersScreen extends StatelessWidget {
                     context,
                   ),
                   buildSwitchListTile(
-                    lan.getTexts('Vegan'),
-                    lan.getTexts('Vegan-sub'),
-                    currentFilters['vegan'],
+                    lan.getTexts('Vegan').toString(),
+                    lan.getTexts('Vegan-sub').toString(),
+                    currentFilters['vegan']!,
                     (newValue) {
                       currentFilters['vegan'] = newValue;
                       Provider.of<MealProvider>(context, listen: false)

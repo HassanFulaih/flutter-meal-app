@@ -12,12 +12,12 @@ import './screens/meal_detail_screen.dart';
 import './screens/category_meals_screen.dart';
 import './screens/on_boarding_screen.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  Widget homeScreen = (prefs.getBool('watched')?? false)? TabsScreen():OnBoardingScreen();
-
+  Widget homeScreen =
+      (prefs.getBool('watched') ?? false) ? TabsScreen() : OnBoardingScreen();
 
   runApp(
     MultiProvider(
@@ -54,11 +54,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       themeMode: tm,
       theme: ThemeData(
-        primarySwatch: primaryColor,
-        accentColor: accentColor,
         canvasColor: Color.fromRGBO(255, 254, 229, 1),
         fontFamily: 'Raleway',
-        buttonColor: Colors.black87,
+        splashColor: Colors.black87,
         cardColor: Colors.white,
         shadowColor: Colors.white60,
         textTheme: ThemeData.light().textTheme.copyWith(
@@ -81,36 +79,39 @@ class MyApp extends StatelessWidget {
               fontFamily: 'RobotoCondensed',
               fontWeight: FontWeight.bold,
             )),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: primaryColor)
+            .copyWith(secondary: accentColor),
       ),
       darkTheme: ThemeData(
-        primarySwatch: primaryColor,
-        accentColor: accentColor,
         canvasColor: Color.fromRGBO(14, 22, 33, 1),
         fontFamily: 'Raleway',
-        buttonColor: Colors.white70,
+        splashColor: Colors.white70,
         cardColor: Color.fromRGBO(24, 37, 51, 1),
         shadowColor: Colors.black54,
         unselectedWidgetColor: Colors.white70,
         textTheme: ThemeData.dark().textTheme.copyWith(
-            bodyText1: TextStyle(
-              color: Colors.white60,
+              bodyText1: TextStyle(
+                color: Colors.white60,
+              ),
+              headline4: TextStyle(
+                color: Colors.white,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+              ),
+              headline5: TextStyle(
+                color: Colors.white,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+              ),
+              headline6: TextStyle(
+                color: Colors.white70,
+                fontSize: 20,
+                fontFamily: 'RobotoCondensed',
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            headline4: TextStyle(
-              color: Colors.white,
-              fontFamily: 'RobotoCondensed',
-              fontWeight: FontWeight.bold,
-            ),
-            headline5: TextStyle(
-              color: Colors.white,
-              fontFamily: 'RobotoCondensed',
-              fontWeight: FontWeight.bold,
-            ),
-            headline6: TextStyle(
-              color: Colors.white70,
-              fontSize: 20,
-              fontFamily: 'RobotoCondensed',
-              fontWeight: FontWeight.bold,
-            )),
+        colorScheme: ColorScheme.fromSwatch(primarySwatch: primaryColor)
+            .copyWith(secondary: accentColor),
       ),
       routes: {
         '/': (ctx) => mainScreen,

@@ -22,16 +22,16 @@ class MealProvider with ChangeNotifier {
 
   void setFilters() async {
     availableMeals = DUMMY_MEALS.where((meal) {
-      if (filters['gluten'] && !meal.isGlutenFree) {
+      if (filters['gluten']! && !meal.isGlutenFree) {
         return false;
       }
-      if (filters['lactose'] && !meal.isLactoseFree) {
+      if (filters['lactose']! && !meal.isLactoseFree) {
         return false;
       }
-      if (filters['vegan'] && !meal.isVegan) {
+      if (filters['vegan']! && !meal.isVegan) {
         return false;
       }
-      if (filters['vegetarian'] && !meal.isVegetarian) {
+      if (filters['vegetarian']! && !meal.isVegetarian) {
         return false;
       }
       return true;
@@ -52,10 +52,10 @@ class MealProvider with ChangeNotifier {
     notifyListeners();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("gluten", filters['gluten']);
-    prefs.setBool("lactose", filters['lactose']);
-    prefs.setBool("vegan", filters['vegan']);
-    prefs.setBool("vegetarian", filters['vegetarian']);
+    prefs.setBool("gluten", filters['gluten']!);
+    prefs.setBool("lactose", filters['lactose']!);
+    prefs.setBool("vegan", filters['vegan']!);
+    prefs.setBool("vegetarian", filters['vegetarian']!);
   }
 
   void getData() async {
@@ -78,7 +78,7 @@ class MealProvider with ChangeNotifier {
     List<Meal> fm = [];
     favoriteMeals.forEach((favMeals) {
       availableMeals.forEach((avMeals) {
-        if(favMeals.id == avMeals.id) fm.add(favMeals);
+        if (favMeals.id == avMeals.id) fm.add(favMeals);
       });
     });
     favoriteMeals = fm;

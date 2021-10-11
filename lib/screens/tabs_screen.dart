@@ -15,7 +15,7 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  List<Map<String, Object>> _pages;
+  List<Map<String, Object>> _pages = [];
   int _selectedPageIndex = 0;
 
   @override
@@ -49,22 +49,23 @@ class _TabsScreenState extends State<TabsScreen> {
     return Directionality(
       textDirection: lan.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(title: Text(_pages[_selectedPageIndex]['title'])),
-        body: _pages[_selectedPageIndex]['page'],
+        appBar:
+            AppBar(title: Text(_pages[_selectedPageIndex]['title'].toString())),
+        body: _pages[_selectedPageIndex]['page'] as Widget,
         bottomNavigationBar: BottomNavigationBar(
           onTap: _selectPage,
-          backgroundColor: Theme.of(context).primaryColor,
-          selectedItemColor: Theme.of(context).accentColor,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
           unselectedItemColor: Colors.white,
           currentIndex: _selectedPageIndex,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.category),
-              title: Text(lan.getTexts('categories')),
+              label: lan.getTexts('categories').toString(),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              title: Text(lan.getTexts('your_favorites')),
+              label: lan.getTexts('your_favorites').toString(),
             ),
           ],
         ),

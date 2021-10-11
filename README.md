@@ -1,14 +1,16 @@
-# Meal App
-![photo_2020-10-29_20-14-40](https://user-images.githubusercontent.com/42120995/97608595-9b808200-1a23-11eb-8140-83c1524483ac.jpg)
-![photo_2020-10-29_20-14-46](https://user-images.githubusercontent.com/42120995/97608600-9d4a4580-1a23-11eb-96e3-5cb9deda6a47.jpg)
-![photo_2020-10-29_20-14-50](https://user-images.githubusercontent.com/42120995/97608603-9d4a4580-1a23-11eb-9ba1-43570596f4ce.jpg)
-![photo_2020-10-29_20-14-54](https://user-images.githubusercontent.com/42120995/97608605-9de2dc00-1a23-11eb-91e8-3c911c993ccb.jpg)
-![photo_2020-10-29_20-14-58](https://user-images.githubusercontent.com/42120995/97608607-9f140900-1a23-11eb-836f-98e4473d1aeb.jpg)
-![photo_2020-10-29_20-15-02](https://user-images.githubusercontent.com/42120995/97608612-9fac9f80-1a23-11eb-97c5-22e7a4023a98.jpg)
-![photo_2020-10-29_20-15-05](https://user-images.githubusercontent.com/42120995/97608614-a0453600-1a23-11eb-92c7-f87d429b99a5.jpg)
-![photo_2020-10-29_20-15-09](https://user-images.githubusercontent.com/42120995/97608619-a1766300-1a23-11eb-9d05-cfb576d65430.jpg)
-![photo_2020-10-29_20-15-12](https://user-images.githubusercontent.com/42120995/97608622-a20ef980-1a23-11eb-82ce-aad7c9983f8b.jpg)
-![photo_2020-10-29_20-15-16](https://user-images.githubusercontent.com/42120995/97608624-a2a79000-1a23-11eb-9cff-0eeda71ec8e6.jpg)
-![photo_2020-10-29_20-15-19](https://user-images.githubusercontent.com/42120995/97608627-a3402680-1a23-11eb-9298-cd13729c3c84.jpg)
-![photo_2020-10-29_20-15-22](https://user-images.githubusercontent.com/42120995/97608629-a3402680-1a23-11eb-9b14-1c477e501065.jpg)
-![photo_2020-10-29_20-15-25](https://user-images.githubusercontent.com/42120995/97608632-a3d8bd00-1a23-11eb-98bf-21231c01a152.jpg)
+# meal_app
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

@@ -28,7 +28,7 @@ class CategoryItem extends StatelessWidget {
       borderRadius: BorderRadius.circular(15),
       child: Container(
         padding: EdgeInsets.all(15),
-        child: Text(lan.getTexts('cat-$id'),
+        child: Text((lan.getTexts('cat-$id')).toString(),
             style: Theme.of(context).textTheme.headline6),
         decoration: BoxDecoration(
           gradient: LinearGradient(

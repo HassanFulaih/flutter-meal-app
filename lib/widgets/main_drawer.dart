@@ -14,13 +14,13 @@ class MainDrawer extends StatefulWidget {
 
 class _MainDrawerState extends State<MainDrawer> {
   Widget buildListTile(
-      String title, IconData icon, Function tapHandler, BuildContext ctx) {
+      String title, IconData icon, Function() tapHandler, BuildContext ctx) {
     return ListTile(
-      leading: Icon(icon, size: 26, color: Theme.of(ctx).buttonColor),
+      leading: Icon(icon, size: 26, color: Theme.of(ctx).splashColor),
       title: Text(
         title,
         style: TextStyle(
-          color: Theme.of(ctx).textTheme.bodyText1.color,
+          color: Theme.of(ctx).textTheme.bodyText1!.color,
           fontSize: 24,
           fontFamily: 'RobotoCondensed',
           fontWeight: FontWeight.bold,
@@ -46,25 +46,31 @@ class _MainDrawerState extends State<MainDrawer> {
                 padding: EdgeInsets.all(20),
                 alignment:
                     lan.isEn ? Alignment.centerLeft : Alignment.centerRight,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 child: Text(
-                  lan.getTexts('drawer_name'),
+                  lan.getTexts('drawer_name').toString(),
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w900,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
               SizedBox(height: 20),
-              buildListTile(lan.getTexts('drawer_item1'), Icons.restaurant, () {
-                Navigator.of(context).pushReplacementNamed(TabsScreen.routeName);
+              buildListTile(
+                  lan.getTexts('drawer_item1').toString(), Icons.restaurant,
+                  () {
+                Navigator.of(context)
+                    .pushReplacementNamed(TabsScreen.routeName);
               }, context),
-              buildListTile(lan.getTexts('drawer_item2'), Icons.settings, () {
+              buildListTile(
+                  lan.getTexts('drawer_item2').toString(), Icons.settings, () {
                 Navigator.of(context)
                     .pushReplacementNamed(FiltersScreen.routeName);
               }, context),
-              buildListTile(lan.getTexts('drawer_item3'), Icons.color_lens, () {
+              buildListTile(
+                  lan.getTexts('drawer_item3').toString(), Icons.color_lens,
+                  () {
                 Navigator.of(context)
                     .pushReplacementNamed(ThemesScreen.routeName);
               }, context),
@@ -74,31 +80,31 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
               SizedBox(height: 10),
               Text(
-                lan.getTexts('drawer_switch_title'),
+                lan.getTexts('drawer_switch_title').toString(),
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
               Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(lan.getTexts('drawer_switch_item2'),
-                        style: Theme.of(context).textTheme.headline6),
-                    Switch(
-                      value: lan.isEn,
-                      onChanged: (newValue) {
-                        lan.changeLan(newValue);
-                        Navigator.of(context).pop();
-                      },
-                      inactiveTrackColor:
-                          Provider.of<ThemeProvider>(context, listen: true).tm ==
-                                  ThemeMode.light
-                              ? null
-                              : Colors.black,
-                    ),
-                    Text(lan.getTexts('drawer_switch_item1'),
-                        style: Theme.of(context).textTheme.headline6),
-                  ],
-                ),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(lan.getTexts('drawer_switch_item2').toString(),
+                      style: Theme.of(context).textTheme.headline6),
+                  Switch(
+                    value: lan.isEn,
+                    onChanged: (newValue) {
+                      lan.changeLan(newValue);
+                      Navigator.of(context).pop();
+                    },
+                    inactiveTrackColor:
+                        Provider.of<ThemeProvider>(context, listen: true).tm ==
+                                ThemeMode.light
+                            ? null
+                            : Colors.black,
+                  ),
+                  Text(lan.getTexts('drawer_switch_item1').toString(),
+                      style: Theme.of(context).textTheme.headline6),
+                ],
+              ),
               SizedBox(height: 10),
               Divider(
                 height: 10,

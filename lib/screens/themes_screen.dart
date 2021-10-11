@@ -14,9 +14,9 @@ class ThemesScreen extends StatelessWidget {
   ThemesScreen({this.fromOnBoarding = false});
 
   Widget buildRadioListTile(
-      ThemeMode themeVal, String txt, IconData icon, BuildContext ctx) {
+      ThemeMode themeVal, String txt, IconData? icon, BuildContext ctx) {
     return RadioListTile(
-      secondary: Icon(icon, color: Theme.of(ctx).buttonColor),
+      secondary: Icon(icon, color: Theme.of(ctx).splashColor),
       value: themeVal,
       groupValue: Provider.of<ThemeProvider>(ctx, listen: true).tm,
       onChanged: (newThemeVal) => Provider.of<ThemeProvider>(ctx, listen: false)
@@ -32,13 +32,15 @@ class ThemesScreen extends StatelessWidget {
       textDirection: lan.isEn ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         appBar: fromOnBoarding
-            ? AppBar(backgroundColor:Theme.of(context).canvasColor, elevation: 0)
-            : AppBar(title: Text(lan.getTexts('theme_appBar_title'))),
+            ? AppBar(
+                backgroundColor: Theme.of(context).canvasColor, elevation: 0)
+            : AppBar(
+                title: Text(lan.getTexts('theme_appBar_title').toString())),
         body: Column(
           children: [
             Container(
               padding: EdgeInsets.all(20),
-              child: Text(lan.getTexts('theme_screen_title'),
+              child: Text(lan.getTexts('theme_screen_title').toString(),
                   style: Theme.of(context).textTheme.headline6),
             ),
             Expanded(
@@ -46,27 +48,33 @@ class ThemesScreen extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(20),
-                    child: Text(lan.getTexts('theme_mode_title'),
+                    child: Text(lan.getTexts('theme_mode_title').toString(),
                         style: Theme.of(context).textTheme.headline6),
                   ),
-                  buildRadioListTile(ThemeMode.system,
-                      lan.getTexts('System_default_theme'), null, context),
+                  buildRadioListTile(
+                      ThemeMode.system,
+                      lan.getTexts('System_default_theme').toString(),
+                      null,
+                      context),
                   buildRadioListTile(
                       ThemeMode.light,
-                      lan.getTexts('light_theme'),
+                      lan.getTexts('light_theme').toString(),
                       Icons.wb_sunny_outlined,
                       context),
-                  buildRadioListTile(ThemeMode.dark, lan.getTexts('dark_theme'),
-                      Icons.nights_stay_outlined, context),
+                  buildRadioListTile(
+                      ThemeMode.dark,
+                      lan.getTexts('dark_theme').toString(),
+                      Icons.nights_stay_outlined,
+                      context),
                   buildListTile(context, "primary"),
                   buildListTile(context, "accent"),
-                  SizedBox(height: fromOnBoarding ? 80:0),
+                  SizedBox(height: fromOnBoarding ? 80 : 0),
                 ],
               ),
             ),
           ],
         ),
-        drawer: fromOnBoarding ? null:MainDrawer(),
+        drawer: fromOnBoarding ? null : MainDrawer(),
       ),
     );
   }
@@ -80,7 +88,9 @@ class ThemesScreen extends StatelessWidget {
 
     return ListTile(
       title: Text(
-          txt == "primary" ? lan.getTexts('primary') : lan.getTexts('accent'),
+          txt == "primary"
+              ? lan.getTexts('primary').toString()
+              : lan.getTexts('accent').toString(),
           style: Theme.of(context).textTheme.headline6),
       trailing: CircleAvatar(
           backgroundColor: txt == "primary" ? primaryColor : accentColor),
